@@ -1,8 +1,7 @@
 # aiogram-media-group
-AIOGram handler for media groups (also known as albums)
+AIOGram handler for media groups (also known as albums). This is a fork of [this](https://github.com/deptyped/aiogram-media-group) repository without Redis dependency.
 
 ### Features
-- Memory and Redis storage drivers supported
 - Ready to work with multiple bot instances
 
 ### Install

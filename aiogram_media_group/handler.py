@@ -4,30 +4,18 @@ from typing import TYPE_CHECKING, Callable, Optional
 
 from aiogram import types, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage as AiogramMemoryStorage
-from aiogram.contrib.fsm_storage.redis import (
-    RedisStorage as AiogramRedisStorage,
-    RedisStorage2 as AiogramRedis2Storage,
-)
+
 from aiogram.dispatcher import FSMContext
 
 from aiogram_media_group.storages.base import BaseStorage
 from aiogram_media_group.storages.memory import MemoryStorage
-from aiogram_media_group.storages.redis import RedisStorage
 
-if TYPE_CHECKING:
-    import aioredis
 
 
 async def _get_storage_from_state(state: FSMContext, prefix, ttl):
     storage_type = type(state.storage)
     if storage_type is AiogramMemoryStorage:
         return MemoryStorage(data=state.storage.data, prefix=prefix)
-    elif storage_type is AiogramRedisStorage:
-        connection: aioredis.RedisConnection = await state.storage.redis()
-        return RedisStorage(connection=connection, prefix=prefix, ttl=ttl)
-    elif storage_type is AiogramRedis2Storage:
-        redis: aioredis.Redis = await state.storage.redis()
-        return RedisStorage(connection=redis.connection, prefix=prefix, ttl=ttl)
     else:
         raise ValueError(f"{storage_type} is unsupported storage")
 
